@@ -1,0 +1,10 @@
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\DataAccessLibrary.dll.config
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\DataAccessLibrary.dll
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\DataAccessLibrary.pdb
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\EntityFramework.dll
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\EntityFramework.SqlServer.dll
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\EntityFramework.xml
+D:\RC\StorMe\DataAccessLibrary\bin\Debug\EntityFramework.SqlServer.xml
+D:\RC\StorMe\DataAccessLibrary\obj\Debug\DataAccessLibrary.csprojResolveAssemblyReference.cache
+D:\RC\StorMe\DataAccessLibrary\obj\Debug\DataAccessLibrary.dll
+D:\RC\StorMe\DataAccessLibrary\obj\Debug\DataAccessLibrary.pdb
