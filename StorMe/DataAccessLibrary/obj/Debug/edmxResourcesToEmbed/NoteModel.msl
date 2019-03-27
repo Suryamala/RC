@@ -19,5 +19,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ToDoNotes">
+      <EntityTypeMapping TypeName="StorMeDbModel.ToDoNote">
+        <MappingFragment StoreEntitySet="ToDoNote">
+          <ScalarProperty Name="isChecked" ColumnName="isChecked" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="toDoName" ColumnName="toDoName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

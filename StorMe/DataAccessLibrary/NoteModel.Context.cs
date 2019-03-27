@@ -27,5 +27,6 @@ namespace DataAccessLibrary
     
         public virtual DbSet<Label> Labels { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<ToDoNote> ToDoNotes { get; set; }
     }
 }

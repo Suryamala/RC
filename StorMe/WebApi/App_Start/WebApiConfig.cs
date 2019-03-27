@@ -29,11 +29,13 @@ namespace WebApi
             //config.Formatters.Add(config.Formatters.XmlFormatter);
             //config.Formatters.Add(config.Formatters.JsonFormatter);
 
-            config.EnableCors();
 
+            // Convention-based routing.
+            config.EnableCors();
+            config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/v1/{controller}/{id}",
+                routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

@@ -5,6 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class ApiBuilderService {
   public buildURL(api:string): string {
-    return "http://localhost:1478/api/v1/"+api;
+    return "http://localhost:1478/api/"+api;
     }
 }

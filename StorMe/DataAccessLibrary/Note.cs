@@ -11,38 +11,22 @@ namespace DataAccessLibrary
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
-
+    
     public partial class Note
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Note()
+        {
+            this.ToDoNotes = new HashSet<ToDoNote>();
+        }
+    
         public int Id { get; set; }
         public string Title { get; set; }
         public int Label { get; set; }
         public string Note1 { get; set; }
-        public Label Label1 { get; set; }
-
-        //public Note(DataRow row)
-        //{
-        //    if (!string.IsNullOrEmpty(row["ID"].ToString()))
-        //    {
-        //        this.Id = Convert.ToInt32(row["ID"]);
-        //    }
-        //    if (!string.IsNullOrEmpty(row["TITEL"].ToString()))
-        //    {
-        //        this.Title = Convert.ToString(row["TITEL"]);
-        //    }
-        //    if (!string.IsNullOrEmpty(row["LABEL"].ToString()))
-        //    {
-        //        this.Label = Convert.ToInt32(row["LABEL"]);
-        //    }
-        //    if (!string.IsNullOrEmpty(row["NOTE"].ToString()))
-        //    {
-        //        this.NoteContent = Convert.ToString(row["NOTE"]);
-        //    }
-        //}
-        //public Note()
-        //{
-
-        //}
+    
+        public virtual Label Label1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ToDoNote> ToDoNotes { get; set; }
     }
 }

@@ -24,5 +24,43 @@ namespace WebApi
             //}
             //return notes;
         }
+        public List<Note> getAllNotes(String searchString)
+        {
+            List<Note> notes = new List<Note>();
+            if (String.IsNullOrEmpty(searchString))
+            {
+                notes = dalNotes.getAllNotes();
+            }
+            else
+            {
+                notes = dalNotes.getAllNotes(searchString);
+            }
+            return notes;
+        }
+
+        public void addNote(Note newNote)
+        {
+            dalNotes.addNote(newNote);
+        }
+
+        public void updateNote(Note note)
+        {
+            dalNotes.updateNote(note);
+        }
+
+        public void deleteNote(int id)
+        {
+            dalNotes.deleteNote(id);
+        }
+
+        public void addToDoNote(Note newToDoNote)
+        {
+            dalNotes.addToDoNote(newToDoNote);
+        }
+
+        public List<string> getTitleList(String searchString)
+        {
+             return dalNotes.getTitleList(searchString);
+        }
     }
 }

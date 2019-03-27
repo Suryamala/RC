@@ -6,7 +6,6 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <NavigationProperty Name="Notes" Relationship="Self.FK_Notes_Label" FromRole="Labels" ToRole="Notes" />
   </EntityType>
   <EntityType Name="Note">
     <Key>
@@ -17,6 +16,7 @@
     <Property Name="Label" Type="Int32" Nullable="false" />
     <Property Name="Note1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="Label1" Relationship="Self.FK_Notes_Label" FromRole="Notes" ToRole="Labels" />
+    <NavigationProperty Name="ToDoNotes" Relationship="StorMeDbModel.FK_ToDoNote_Notes" FromRole="Note" ToRole="ToDoNote" />
   </EntityType>
   <Association Name="FK_Notes_Label">
     <End Role="Labels" Type="Self.Label" Multiplicity="1" />
@@ -37,5 +37,31 @@
       <End Role="Labels" EntitySet="Labels" />
       <End Role="Notes" EntitySet="Notes" />
     </AssociationSet>
+    <EntitySet Name="ToDoNotes" EntityType="StorMeDbModel.ToDoNote" />
+    <AssociationSet Name="FK_ToDoNote_Notes" Association="StorMeDbModel.FK_ToDoNote_Notes">
+      <End Role="Note" EntitySet="Notes" />
+      <End Role="ToDoNote" EntitySet="ToDoNotes" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="ToDoNote">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="toDoName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Note" Type="Int32" Nullable="false" />
+    <Property Name="isChecked" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_ToDoNote_Notes">
+    <End Type="StorMeDbModel.Note" Role="Note" Multiplicity="1" />
+    <End Type="StorMeDbModel.ToDoNote" Role="ToDoNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Note">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ToDoNote">
+        <PropertyRef Name="Note" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

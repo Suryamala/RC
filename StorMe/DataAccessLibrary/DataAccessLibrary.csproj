@@ -73,6 +73,9 @@
       <DependentUpon>NoteModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToDoNote.cs">
+      <DependentUpon>NoteModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -16,7 +16,16 @@
     <Property Name="Label" Type="int" Nullable="false" />
     <Property Name="Note" Type="varchar(max)" Nullable="false" />
   </EntityType>
-  <Association Name="FK_Notes_Label">
+  <EntityType Name="ToDoNote">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="toDoName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Note" Type="int" Nullable="false" />
+    <Property Name="isChecked" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Notes_Labels">
     <End Role="Labels" Type="Self.Labels" Multiplicity="1" />
     <End Role="Notes" Type="Self.Notes" Multiplicity="*" />
     <ReferentialConstraint>
@@ -28,12 +37,29 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ToDoNote_Notes">
+    <End Role="Notes" Type="Self.Notes" Multiplicity="1" />
+    <End Role="ToDoNote" Type="Self.ToDoNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Notes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ToDoNote">
+        <PropertyRef Name="Note" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="StorMeDbModelStoreContainer">
     <EntitySet Name="Labels" EntityType="Self.Labels" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Notes" EntityType="Self.Notes" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Notes_Label" Association="Self.FK_Notes_Label">
+    <EntitySet Name="ToDoNote" EntityType="Self.ToDoNote" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Notes_Labels" Association="Self.FK_Notes_Labels">
       <End Role="Labels" EntitySet="Labels" />
       <End Role="Notes" EntitySet="Notes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ToDoNote_Notes" Association="Self.FK_ToDoNote_Notes">
+      <End Role="Notes" EntitySet="Notes" />
+      <End Role="ToDoNote" EntitySet="ToDoNote" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

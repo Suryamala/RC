@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="StorMeDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="StorMeDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Labels">
           <Key>
             <PropertyRef Name="Id" />
@@ -21,7 +21,16 @@
           <Property Name="Label" Type="int" Nullable="false" />
           <Property Name="Note" Type="varchar(max)" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Notes_Label">
+        <EntityType Name="ToDoNote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="toDoName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Note" Type="int" Nullable="false" />
+          <Property Name="isChecked" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Notes_Labels">
           <End Role="Labels" Type="Self.Labels" Multiplicity="1" />
           <End Role="Notes" Type="Self.Notes" Multiplicity="*" />
           <ReferentialConstraint>
@@ -33,16 +42,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ToDoNote_Notes">
+          <End Role="Notes" Type="Self.Notes" Multiplicity="1" />
+          <End Role="ToDoNote" Type="Self.ToDoNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Notes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ToDoNote">
+              <PropertyRef Name="Note" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="StorMeDbModelStoreContainer">
           <EntitySet Name="Labels" EntityType="Self.Labels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notes" EntityType="Self.Notes" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Notes_Label" Association="Self.FK_Notes_Label">
+          <EntitySet Name="ToDoNote" EntityType="Self.ToDoNote" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Notes_Labels" Association="Self.FK_Notes_Labels">
             <End Role="Labels" EntitySet="Labels" />
             <End Role="Notes" EntitySet="Notes" />
           </AssociationSet>
+          <AssociationSet Name="FK_ToDoNote_Notes" Association="Self.FK_ToDoNote_Notes">
+            <End Role="Notes" EntitySet="Notes" />
+            <End Role="ToDoNote" EntitySet="ToDoNote" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="StorMeDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -52,7 +77,6 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Notes" Relationship="Self.FK_Notes_Label" FromRole="Labels" ToRole="Notes" />
         </EntityType>
         <EntityType Name="Note">
           <Key>
@@ -63,6 +87,7 @@
           <Property Name="Label" Type="Int32" Nullable="false" />
           <Property Name="Note1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Label1" Relationship="Self.FK_Notes_Label" FromRole="Notes" ToRole="Labels" />
+          <NavigationProperty Name="ToDoNotes" Relationship="StorMeDbModel.FK_ToDoNote_Notes" FromRole="Note" ToRole="ToDoNote" />
         </EntityType>
         <Association Name="FK_Notes_Label">
           <End Role="Labels" Type="Self.Label" Multiplicity="1" />
@@ -83,7 +108,33 @@
             <End Role="Labels" EntitySet="Labels" />
             <End Role="Notes" EntitySet="Notes" />
           </AssociationSet>
+          <EntitySet Name="ToDoNotes" EntityType="StorMeDbModel.ToDoNote" />
+          <AssociationSet Name="FK_ToDoNote_Notes" Association="StorMeDbModel.FK_ToDoNote_Notes">
+            <End Role="Note" EntitySet="Notes" />
+            <End Role="ToDoNote" EntitySet="ToDoNotes" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="ToDoNote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="toDoName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="Int32" Nullable="false" />
+          <Property Name="isChecked" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ToDoNote_Notes">
+          <End Type="StorMeDbModel.Note" Role="Note" Multiplicity="1" />
+          <End Type="StorMeDbModel.ToDoNote" Role="ToDoNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Note">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ToDoNote">
+              <PropertyRef Name="Note" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -105,6 +156,16 @@
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Label" ColumnName="Label" />
                 <ScalarProperty Name="Note1" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ToDoNotes">
+            <EntityTypeMapping TypeName="StorMeDbModel.ToDoNote">
+              <MappingFragment StoreEntitySet="ToDoNote">
+                <ScalarProperty Name="isChecked" ColumnName="isChecked" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="toDoName" ColumnName="toDoName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

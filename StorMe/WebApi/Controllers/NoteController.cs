@@ -1,6 +1,7 @@
 ﻿using DataAccessLibrary;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,67 +10,72 @@ using System.Web.Http.Cors;
 namespace WebApi.Controllers
 {
     //[Authorize]
-    //[RoutePrefix("api/Notes")]
+    [RoutePrefix("api/note")]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class NoteController : ApiController
     {
         BLNotes blNotes = new BLNotes();
         // GET api/notes
-        //[HttpGet]
-        //[Route("all")]
-        //public List<Note> Get()
-        //{ 
-        //    return blNotes.getAllNotes();
-        //}
-        public IHttpActionResult Get(HttpRequestMessage request)
+        [HttpGet]
+        [Route("all")]
+        public IHttpActionResult Get(HttpRequestMessage request, String searchString = null)
         {
             List<Note> notes = new List<Note>();
-            notes = blNotes.getAllNotes();
-            if (notes.Count == 0)
-            {
-                return InternalServerError();
-            }
+            notes = blNotes.getAllNotes(searchString);
             return Ok(notes);
-           // return Ok(notes);
         }
-
-        // GET api/notes/5 -- Remove code
-        //public Note Get(int id)
-        //{
-        //    using (StorMeDbEntities storDbEntities = new StorMeDbEntities())
-        //    {
-        //        storDbEntities.Configuration.ProxyCreationEnabled = false;
-        //        //first or default e such that e.Id -- lambda function
-        //        return storDbEntities.Notes.FirstOrDefault(e => e.Id == id);
-        //    }
-        //}
 
         // POST api/values
-        public void Post([FromBody]Note value)
+        [HttpPost]
+        [Route("add")]
+        public void Post([FromBody]Note newNote)
         {
-            using (StorMeDbEntities storDbEntities = new StorMeDbEntities())
-            {
-                storDbEntities.Configuration.ProxyCreationEnabled = false;
-                storDbEntities.Notes.Add(value);
-                storDbEntities.SaveChanges();
-            }
+            blNotes.addNote(newNote);
         }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        // POST api/values
+        [HttpPost]
+        [Route("addToDoNote")]
+        public void addToDoNote([FromBody]Note newNote)
         {
+            blNotes.addToDoNote(newNote);
+        }
+
+        // PUT api/values/5 edit 
+        [HttpPut]
+        [Route("updateNote")]
+        public IHttpActionResult Put([FromBody]Note note, Int32 id)
+        {
+
+           
+                blNotes.updateNote(note);
+            return Ok(true);
+                
+                //if (noteEntity == null)
+                //{
+                //    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Note with id = " + id.ToString() + "not found");
+                //}
+                //else
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.OK, noteEntity);
+                //}
+            
         }
 
         // DELETE api/values/5
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("delete")]
+        public void Delete(Int32 id)
         {
-            using (StorMeDbEntities storDbEntities = new StorMeDbEntities())
-            {
-                //first or default e such that e.Id -- lambda function
-                Note note = storDbEntities.Notes.FirstOrDefault(e => e.Id == id);
-                storDbEntities.Notes.Remove(note);
-                storDbEntities.SaveChanges();
-            }
+            blNotes.deleteNote(id);
+        }
+
+        [HttpGet]
+        [Route("titlelist")]
+        public List<string> getTitlelist(String searchString = null)
+        {
+            List<Note> notes = new List<Note>();
+            return blNotes.getTitleList(searchString);
         }
     }
 }
