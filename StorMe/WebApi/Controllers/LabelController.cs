@@ -10,12 +10,14 @@ using System.Web.Http.Cors;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/label")]
+
+    // Enabling cors to share cross origin resources
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class LabelController : ApiController
     {
         BLLabels blLabel = new BLLabels();
 
-        // GET api/labels
+        // GET -- Get all labels 
         [HttpGet]
         [Route("all")]
         public IHttpActionResult Get(HttpRequestMessage request)
@@ -28,15 +30,5 @@ namespace WebApi.Controllers
             }
             return Ok(labels);
         }
-
-        //public void Post([FromBody]Label value)
-        //{
-        //    using (StorMeDbEntities storDbEntities = new StorMeDbEntities())
-        //    {
-        //        storDbEntities.Configuration.ProxyCreationEnabled = false;
-        //        storDbEntities.Labels.Add(value);
-        //        storDbEntities.SaveChanges();
-        //    }
-        //}
     }
 }

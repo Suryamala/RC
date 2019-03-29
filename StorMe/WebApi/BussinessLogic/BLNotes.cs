@@ -10,20 +10,10 @@ namespace WebApi
 {
     public class BLNotes
     {
-
+        // DALNotes provides the Data Access for following methods 
         DALNotes dalNotes = new DALNotes();
-        public List<Note> getAllNotes()
-        {
-            return dalNotes.getAllNotes();
-            //List<Note> notes = new List<Note>();
-            //DataTable dt= dalNotes.getAllNotes();
-            //foreach(DataRow row in dt.Rows)
-            //{
-            //    Note n = new Note(row);
-            //    notes.Add(n);
-            //}
-            //return notes;
-        }
+
+        // Get all notes by search string filter or whole list if search string is empty
         public List<Note> getAllNotes(String searchString)
         {
             List<Note> notes = new List<Note>();
@@ -38,26 +28,31 @@ namespace WebApi
             return notes;
         }
 
+        // Add note
         public void addNote(Note newNote)
         {
             dalNotes.addNote(newNote);
         }
 
+        // Update note
         public void updateNote(Note note)
         {
             dalNotes.updateNote(note);
         }
 
+        // Delete note
         public void deleteNote(int id)
         {
             dalNotes.deleteNote(id);
         }
 
+        // Add To do note
         public void addToDoNote(Note newToDoNote)
         {
             dalNotes.addToDoNote(newToDoNote);
         }
 
+        // Get title's list for search autocomplete on Title
         public List<string> getTitleList(String searchString)
         {
              return dalNotes.getTitleList(searchString);

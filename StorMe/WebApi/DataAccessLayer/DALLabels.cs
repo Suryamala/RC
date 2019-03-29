@@ -8,6 +8,7 @@ namespace WebApi.DataAccessLayer
 {
     public class DALLabels
     {
+        // Get all lables list
         public List<Label> getAllLabels()
         {
             using (StorMeDbEntities storDbEntities = new StorMeDbEntities())

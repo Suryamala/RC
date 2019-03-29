@@ -1,111 +1,127 @@
+<!-- Note: Modals can be implemented by using modal services 
+  but in this code modals are implemented in the same html file -->
+
+<!-- Loader starts here-->
 <div class=" col-md-12">
-<div class="spinner-border spinner" [hidden]="!loading" role="status">
-  <span class="sr-only">Loading...</span>
+  <div class="spinner-border spinner" [hidden]="!loading" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
 </div>
-</div>
- <div class = "container-fluid" [hidden]="loading">
-      <div class="row">
-        <!-- Search bar starts here-->
-        <div class="container col-md-3">
-          <div>
-            <form class="py-2">
-              <div class="input-group">
-                <input type="text" [(ngModel)]="searchString" name="st" #st="ngModel" list="titles"
-                  class="form-control typeahead border-secondary form-control-sm" (input)="searchByTitle()"
-                  placeholder="Start typing something to search..." autocomplete="off">
-                  <datalist id="titles">
-                    <option *ngFor="let title of titles; trackBy:indexTracker" [ngValue]="title">{{ title }}</option>
-                  </datalist>
-                <div class="input-group-append">
-                  <button type="submit" (click)="getAllNotes()" class="btn btn-outline-secondary btn-sm">
-                    <i class="fa fa-search"></i>
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- Search bar ends here-->
-              <!-- add button starts here-->
-        <div class="col text-right py-2">
-          <button type="button" class="btn btn-secondary btn-sm mr-2" data-toggle="modal" data-target="#noteModal"><i
-              class="fa fa-plus"></i> Note</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#todoModal"><i
-              class="fa fa-plus"></i> Todo</button>
-        </div>
-      </div>
-          <!-- add button ends here-->
-           <!-- notes list starts here-->
-          <div>
-            <div class="row ">
-              <div class="card-columns col-md-12 ">
-                <div *ngFor="let note of notes; index as i">
-                  <div class="card">
-                    <button type="button" class="close mt-1 mr-2" data-dismiss="modal"><i class="fa fa-trash pull-right"
-                        aria-hidden="true" data-dismiss="modal" data-toggle="modal" (click)="passNoteToModal(note)" data-target="#deleteNoteModal"></i></button>
-                    <button type="button" class="close mt-1 " data-dismiss="modal" data-toggle="modal"
-                      (click)="passNoteToModal(note)" data-target="#updateNoteModal"><i class="fa fa-pencil pull-right"
-                        aria-hidden="true"></i></button>
-                    <span class="badge pull-right mt-2 mr-1 text-white badge-dark">{{ note.Label1.Name }}</span>
-                    <h6 class="card-header header-style text-white">{{ note.Title }}</h6>
-                    <div class="card-body card-css">
-                        <div *ngIf="note.ToDoNotes.length != 0">
-                            <h6>To do:</h6>
-                            <option *ngFor="let toDo of note.ToDoNotes; trackBy:indexTracker" [ngValue]="toDo">{{ toDo.toDoName }}   {{toDo.isChecked}}
-                              </option>
-                            <hr>
-                            </div>
-                      <p class="card-text font-italic">{{ note.Note1 }}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<!-- Loader ends here-->
+
+<div class="container-fluid" [hidden]="loading">
+  <div class="row">
+    <!-- Search bar starts here-->
+    <div class="container col-md-3">
+      <div>
+        <form class="py-2">
+          <div class="input-group">
+            <input type="text" [(ngModel)]="searchString" name="st" #st="ngModel" list="titles"
+              class="form-control typeahead border-secondary form-control-sm" (input)="searchByTitle()"
+              placeholder="Start typing something to search..." autocomplete="off">
+            <datalist id="titles">
+              <option *ngFor="let title of titles; trackBy:indexTracker" [ngValue]="title">{{ title }}</option>
+            </datalist>
+            <div class="input-group-append">
+              <button type="submit" (click)="getAllNotes()" class="btn btn-outline-secondary btn-sm">
+                <i class="fa fa-search"></i>
+              </button>
             </div>
           </div>
-        <!-- notes list ends here-->
+        </form>
+      </div>
+    </div>
+    <!-- Search bar ends here-->
+
+    <!-- Add button starts here-->
+    <div class="col text-right py-2">
+      <button type="button" class="btn btn-secondary btn-sm mr-2" data-toggle="modal" data-target="#addNoteModal"><i
+          class="fa fa-plus"></i> Note</button>
+      <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#addTodoModal"><i
+          class="fa fa-plus"></i> Todo</button>
+    </div>
   </div>
+  <!-- Add button ends here-->
+
+  <!-- Notes list starts here-->
+  <div>
+    <div class="row ">
+      <div class="card-columns col-md-12 ">
+        <div *ngFor="let note of notes; index as i">
+          <div class="card">
+            <button type="button" class="close fa-icons mr-2" data-dismiss="modal"><i class="fa fa-trash pull-right"
+                aria-hidden="true" data-dismiss="modal" data-toggle="modal" (click)="passNoteToModal(note)"
+                data-target="#deleteNoteModal"></i></button>
+            <button type="button" class="close fa-icons " data-dismiss="modal" data-toggle="modal"
+              (click)="passNoteToModal(note)" data-target="#updateNoteModal"><i class="fa fa-pencil pull-right"
+                aria-hidden="true"></i></button>
+            <span class="badge pull-right mt-2 mr-1 text-white badge-dark label-size">{{ note.Label1.Name }}</span>
+            <h6 class="card-header header-style text-white">{{ note.Title }}</h6>
+            <div class="card-body card-css">
+              <div *ngIf="note.ToDoNotes.length != 0">
+                <h6>To do:</h6>
+                <div *ngFor="let toDo of note.ToDoNotes; trackBy:indexTracker">
+                  <input type="checkbox" id="chk_{{toDo.Id}}" value="true" [checked]="toDo.isChecked =='true'"
+                    [disabled]="true" [(ngModel)]="toDo.isChecked" name="chkName{{toDo.Id}}">
+                  {{ toDo.toDoName }}
+                </div>
+                <hr>
+              </div>
+              <p class="card-text note-font">{{ note.Note1 }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- notes list ends here-->
+</div>
+
+
 <!-- The Add Note Modal starts here-->
-<div class="modal fade" id="noteModal">
+<div class="modal fade" id="addNoteModal">
   <div class="modal-dialog">
     <div class="modal-content">
-
       <!-- Modal Header -->
       <div class="modal-header header-style">
         <h6 class="modal-title text-white">Add Note</h6>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-
       <!-- Modal body -->
-      <form #addNoteForm="ngForm" type="submit" novalidate>
+      <form #addNoteForm="ngForm" (ngSubmit)="addNote(addNoteForm)" novalidate>
         <div class="modal-body">
           <div class="md-form mb-3">
             <label data-error="wrong" data-success="right" for="noteForm-title">Title</label>
-            <input type="text" class="form-control" placeholder="Enter new title" [(ngModel)]="noteInfo.Title" name="ttl" #ttl="ngModel" id="ttl" required>
-              <span class="text-danger small" *ngIf="ttl.errors?.required && submitted">Title is required
-              </span>
+            <input type="text" class="form-control" placeholder="Enter new title" [(ngModel)]="noteInfo.Title"
+              name="newTitle" #newTitle="ngModel" required>
+            <span class="text-danger small" *ngIf="newTitle.errors?.required && addNoteFormSubmitted">Please enter title
+            </span>
+          </div>
+          <div class="md-form mb-3 w-50">
+            <label class="float-left">Select label</label>
+            <select [(ngModel)]="selectedAddLabelId" #selectedLabel="ngModel" name="selectedLabel"
+              class="form-control input-lg" required>
+              <option [value]="0">Select Label
+              </option>
+              <option *ngFor="let label of labels; trackBy:indexTracker" [ngValue]="label.Id">{{ label.Name }}
+              </option>
+            </select>
+            <span class="text-danger small" *ngIf="selectedAddLabelId == '0' && addNoteFormSubmitted">Please select
+              label
+            </span>
           </div>
           <div class="md-form mb-3">
-            <div class="col-md-6 ">
-              <label class="float-left">Select label</label>
-              <select [(ngModel)]="noteInfo.Label1" #selectedLabel="ngModel" name="selectedLabel"
-                class="form-control input-lg" ngControl="noteInfo" required>{{labels}}
-                <!-- <option [ngValue]="" selected disabled hidden>Choose here</option> -->
-                <option [ngValue]="null" disabled [selected]="true">--Select labelsss--</option>
-                <option *ngFor="let label of labels; trackBy:indexTracker" [ngValue]="label">{{ label.Name }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="md-form mb-4">
             <label data-error="wrong" data-success="right" for="noteForm-note">Note Content</label>
-            <textarea type="" [(ngModel)]="noteInfo.Note1" name="label" #label="ngModel" placeholder="Enter new note" id="noteForm-note"
-              class="form-control validate"></textarea>
+            <textarea type="" [(ngModel)]="noteInfo.Note1" name="label" #label="ngModel" placeholder="Enter new note"
+              id="noteForm-note" class="form-control validate" required></textarea>
+            <span class="text-danger small" *ngIf="label.errors?.required && addNoteFormSubmitted">Please enter note
+            </span>
           </div>
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" (click)="addNote(addNoteForm.valid)" class="btn btn-primary btn-sm" data-dismiss="modal">Save</button>
-          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-info btn-sm">Save</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="resetAddedNote(addNoteForm)">Cancel</button>
         </div>
       </form>
     </div>
@@ -113,9 +129,8 @@
 </div>
 <!-- The Add Note Modal ends here-->
 
-
 <!-- The Todo Note Modal starts here -->
-<div class="modal fade" id="todoModal">
+<div class="modal fade" id="addTodoModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -124,43 +139,57 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <!-- Modal body -->
-      <div class="modal-body">
-        <div class="md-form mb-3">
-          <label data-error="wrong" data-success="right" for="noteForm-title">Title</label>
-          <input [(ngModel)]="toDoNoteInfo.Title" name="todoTitle" #todoTitle="ngModel" type="text" id="noteForm-title" placeholder="Enter new title" class="form-control validate">
-        </div>
-        <div class="md-form mb-3">
+      <form #addtoDoNoteForm="ngForm" (ngSubmit)="addTodoNote(addtoDoNoteForm)" novalidate>
+        <div class="modal-body">
           <div class="md-form mb-3">
-            <div class="col-md-6 ">
-              <label class="float-left">Select label</label>
-              <select [(ngModel)]="toDoNoteInfo.Label1" #selectedLabel="ngModel" name="selectedLabel"
-                class="form-control input-lg" required>{{labels}}
-                <option selected [ngValue]="null">--Select label--</option>
-                <option *ngFor="let label of labels; trackBy:indexTracker" [ngValue]="label">{{ label.Name }}
-                </option>
-              </select>
+            <label data-error="wrong" data-success="right" for="noteForm-title">Title</label>
+            <input [(ngModel)]="toDoNoteInfo.Title" name="todoTitle" #todoTitle="ngModel" type="text"
+              id="noteForm-title" placeholder="Enter new title" class="form-control validate" required>
+            <span class="text-danger small" *ngIf="todoTitle.errors?.required && addToDoNoteFormSubmitted">Please enter
+              title
+            </span>
+          </div>
+          <div class="md-form mb-3 w-50">
+            <label class="float-left">Select label</label>
+            <select [(ngModel)]="selectedLabelId" #newLabel="ngModel" name="newLabel" class="form-control input-lg"
+              required>
+              <option [value]="0">Select Label
+              </option>
+              <option *ngFor="let label of labels; trackBy:indexTracker" [ngValue]="label.Id">{{ label.Name }}
+              </option>
+            </select>
+            <span class="text-danger small" *ngIf="selectedLabelId == '0' && addToDoNoteFormSubmitted">Please select
+              label
+            </span>
+          </div>
+          <div class="md-form mb-2">
+            <label data-error="wrong" data-success="right" for="noteForm-note">Add in To Do list</label>
+            <div *ngFor="let T of toDoNoteInfo.ToDoNotes; index as i">
+              <input [(ngModel)]="T.toDoName" name="toDoItem{{i}}" type="text" id="toDo_{{T.toDoName}}"
+                class="form-control validate mb-2" required>
             </div>
+            <span class="text-danger small" *ngIf="emptyToDoFound && addToDoNoteFormSubmitted">Please enter
+                in all to do item
+              </span>
           </div>
-          
-        </div>
-        <div class="md-form mb-4">
-          <label data-error="wrong" data-success="right" for="noteForm-note">toDO list</label>
-          <div *ngFor="let T of toDoNoteInfo.ToDoNotes; index as i" >
-          <input [(ngModel)]="T.toDoName" name="toDoItem" #toDoItem="ngModel" type="text" id="noteForm-toDo" class="form-control validate">
+          <input class="form-input qtyplus mr-2" (click)="addNewTodoInList()" type="button" value="+" />
+          <input class="form-input qtyminus mr-2" type="button" (click)="removeTodoFromList(T)" value="-" />
+          <div class="md-form mb-3">
+            <label data-error="wrong" data-success="right" for="noteForm-note">Note Content</label>
+            <input [(ngModel)]="toDoNoteInfo.Note1" name="todoContent" #todoContent="ngModel" type="text"
+              id="noteForm-note" placeholder="Enter new note" class="form-control validate" required>
+            <span class="text-danger small" *ngIf="todoContent.errors?.required && addToDoNoteFormSubmitted">Please
+              enter note
+            </span>
           </div>
         </div>
-        <button type="button" class="btn btn-sm" (click)="addNewTodoInList()">+</button>
-        <button type="button" class="btn btn-sm" (click)="removeTodoFromList(T)">-</button>
-        <div class="md-form mb-4">
-          <label data-error="wrong" data-success="right" for="noteForm-note">Note Content</label>
-          <input [(ngModel)]="toDoNoteInfo.Note1" name="todoContent" #todoContent="ngModel" type="text" id="noteForm-note" class="form-control validate">
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-info btn-sm">Save</button>
+          <button type="button" class="btn btn-secondary btn-sm"
+            (click)="resetAddedToDoNote(addtoDoNoteForm)">Cancel</button>
         </div>
-      </div>
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="submit" (click)="addTodoNote()" class="btn btn-primary btn-sm" data-dismiss="modal">Save</button>
-        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -176,75 +205,76 @@
         <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
       </div>
       <!-- Modal body -->
-      <form>
+      <form #updateNoteForm="ngForm" (ngSubmit)="updateNote(updateNoteForm.valid)" novalidate>
         <div class="modal-body">
           <div class="md-form mb-3">
             <label data-error="wrong" data-success="right" for="noteForm-title">Title</label>
-            <input [(ngModel)]="currentSelectedNote.Title" name="ttl" #ttl="ngModel" placeholder="Enter new title"
-              type="text" id="noteForm-title" class="form-control validate">
+            <input [(ngModel)]="currentSelectedNote.Title" name="title" #title="ngModel" placeholder="Enter new title"
+              type="text" id="noteForm-title" class="form-control validate" required>
+            <span class="text-danger small" *ngIf="title.errors?.required && updateNoteFormSubmitted">Please enter title
+            </span>
           </div>
-          <div class="md-form mb-3">
-            <div class="col-md-6 ">
-              <label class="float-left">Select label</label>{{ label.Id }}
-              <select [(ngModel)]="currentSelectedNote.Label" #selectedLabel="ngModel" name="selectedLabel"
-                class="form-control input-lg" required>{{labels}}
-                <option value="0">--Select label--</option>
-                <option *ngFor="let label of labels" [value]="label.Id">{{ label.Name }}
-                </option>
-              </select>
+          <div class="md-form mb-3 w-50">
+            <label class="float-left">Select label</label>
+            <select [(ngModel)]="currentSelectedNote.Label" #selectedLabel="ngModel" name="selectedLabel"
+              class="form-control input-lg" required>{{labels}}
+              <option *ngFor="let label of labels" [value]="label.Id">{{ label.Name }}
+              </option>
+            </select>
+          </div>
+          <div class="md-form mb-3" *ngIf="currentSelectedNote.ToDoNotes.length != 0">
+            <label>To do:</label>
+            <div class="md-form mb-3">
+              <div *ngFor="let toDo of currentSelectedNote.ToDoNotes">
+                <input type="checkbox" id="chk_{{toDo.Id}}" value="true" [checked]="toDo.isChecked =='true'"
+                  [(ngModel)]="toDo.isChecked" name="chkName{{toDo.Id}}">
+                <label class="form-check-label" for="exampleCheck1">{{toDo.toDoName}}</label>
+              </div>
             </div>
           </div>
-          <div class="md-form mb-4" *ngIf="currentSelectedNote.ToDoNotes.length != 0">
-              <label>To do</label>
-              <div class="md-form mb-4">
-                <div *ngFor="let toDo of currentSelectedNote.ToDoNotes; index as i">
-                <input type="checkbox" [(ngModel)]="toDo.isChecked" name="toDoIsChecked" #toDoIsChecked="ngModel" class="form-check-input" id="toDo.isChecked">
-                <label class="form-check-label" for="exampleCheck1">{{toDo.toDoName}}</label> {{toDo.isChecked}}
-                </div>
-              </div>
-          </div>
-          
-          <div class="md-form mb-4">
+          <div class="md-form mb-3">
             <label data-error="wrong" data-success="right" for="noteForm-note">Note Content</label>
             <textarea type="" [(ngModel)]="currentSelectedNote.Note1" name="noteContent" #noteContent="ngModel"
-              id="noteForm-note" class="form-control validate"></textarea>
+              id="noteForm-note" class="form-control validate" required></textarea>
+            <span class="text-danger small" *ngIf="noteContent.errors?.required && updateNoteFormSubmitted">Please enter
+              note
+            </span>
           </div>
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" (click)="updateNote()" class="btn btn-primary btn-sm"
-            data-dismiss="modal">Update</button>
-          <button type="submit" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-info btn-sm">Update</button>
+          <button type="button" class="btn btn-secondary btn-sm"
+            (click)="resetUpdatedNote(updateNoteForm)">Cancel</button>
         </div>
       </form>
     </div>
   </div>
-  </div>
-  <!-- The Update Note Modal ends here-->
+</div>
+<!-- The Update Note Modal ends here-->
 
-<!-- The Update Note Modal starts here-->
+<!-- The Delete Note Modal starts here-->
 <div class="modal fade" id="deleteNoteModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header header-style">
-          <h6 class="modal-title text-white">Delete Note</h6>
-          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header header-style">
+        <h6 class="modal-title text-white">Delete Note</h6>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <div class="md-form mb-4">
+          <h6> Do you really want to delete Note: {{currentSelectedNote.Title}}?</h6>
         </div>
-        <!-- Modal body -->
-          <div class="modal-body">
-         
-            <div class="md-form mb-4">
-              <h6> Do you really want to delete Note: {{currentSelectedNote.Title}}?</h6>
-            </div>
-          </div>
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" (click)="deleteNote()" class="btn btn-primary btn-sm"
-              data-dismiss="modal">Yes</button>
-            <button type="submit" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
-          </div>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" (click)="deleteNote()" class="btn btn-info btn-sm" data-dismiss="modal">Yes</button>
+        <button type="submit" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
       </div>
     </div>
-    </div>
-    <!-- The elete confirmation box ends here-->
+  </div>
+</div>
+<!-- The delete confirmation box ends here-->
